@@ -1,0 +1,25 @@
+{
+  "name": "tracktechjobsbd",
+  "version": "1.0.0",
+  "description": "As of **February 17, 2025**, the table below illustrates that companies in Bangladesh generally do not post job openings in a centralized location.",
+  "main": "puppeteer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Prisoner2-6-7/TrackTechJobsBD.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Prisoner2-6-7/TrackTechJobsBD/issues"
+  },
+  "homepage": "https://github.com/Prisoner2-6-7/TrackTechJobsBD#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "mongoose": "^8.10.1",
+    "puppeteer": "^24.2.1"
+  }
+}
