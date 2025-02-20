@@ -1,4 +1,11 @@
-const puppeteer = require("puppeteer"); // changed line here: using CommonJS syntax
+const puppeteer = require("puppeteer"); 
+const mongoose = require('mongoose')
+require('dotenv').config(); // Load environment variables from .env
+const mongoURI = process.env.MONGO_URI
+
+mongoose.connect(mongoURI, {})
+.then(() => console.log('connected to db'))
+.catch(err => console.log('couldnt connect to db:', err))
 
 const requestHeaders = {
     'user-agent':
@@ -7,7 +14,7 @@ const requestHeaders = {
 
 async function trackJobPosts() {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: ["--no-sandbox"],
         defaultViewport:null
     });
@@ -41,8 +48,7 @@ async function trackJobPosts() {
     }
 
     // console.log(jobLinks)   
-
-    await browser.close();
+    await browser.close()
 }
 
 trackJobPosts()
