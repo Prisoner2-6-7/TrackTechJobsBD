@@ -44,11 +44,10 @@ async function seliseDetails(page) {
                 return {
                     jobTitle: jobTitleEl ? jobTitleEl.innerText.trim() : 'Job title not found',
                     jobDeadline: jobDeadlineEl ? jobDeadlineEl.innerText.trim() : 'Job Deadline not found',
-                    location: locationEl ? locationEl.innerText.trim() : 'Location not found',
+                    jobLocation: locationEl ? locationEl.innerText.trim() : 'Location not found',
                 };
             });
             jobDetails.jobURL = jobUrls[i];
-            console.log(jobDetails);
             
             try {
                 // Modified: Check if job already exists based on jobTitle and jobDeadline
@@ -145,7 +144,7 @@ async function trackJobPosts() {
     // Scraping from selisegroup.com with custom headers
     await page.setExtraHTTPHeaders({ ...requestHeaders });
 
-    // await seliseDetails(page);
+    await seliseDetails(page);
     await cefaloDetails(page);
 
     await browser.close();
