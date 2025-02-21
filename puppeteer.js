@@ -20,7 +20,7 @@ const requestHeaders = {
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
     Referer: 'https://www.google.com/', };
 
-async function selisaDetails(page) {
+async function seliseDetails(page) {
     
     await page.goto('https://selisegroup.com/join-the-team/', { waitUntil: 'networkidle2', timeout:0 });
     
@@ -83,7 +83,7 @@ async function trackJobPosts() {
     // Scraping from selisegroup.com with custom headers
     await page.setExtraHTTPHeaders({ ...requestHeaders });
 
-    await selisaDetails(page);
+    await seliseDetails(page);
 
     await browser.close();
     await mongoose.disconnect();
