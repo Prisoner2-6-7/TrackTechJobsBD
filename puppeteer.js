@@ -3,9 +3,9 @@ const mongoose = require('mongoose')
 require('dotenv').config(); // Load environment variables from .env
 const mongoURI = process.env.MONGO_URI
 
-// mongoose.connect(mongoURI, {})
-// .then(() => console.log('connected to db'))
-// .catch(err => console.log('couldnt connect to db:', err))
+mongoose.connect(mongoURI, {})
+.then(() => console.log('connected to db'))
+.catch(err => console.log('couldnt connect to db:', err))
 
 const { getJobDetailModel } = require('./schemas/jobDetails'); // Modified: import helper
 
@@ -107,7 +107,24 @@ async function cefaloDetails(page) {
                     
                     jobDetails.jobURL = jobUrls[i];
                     jobDetails.jobLocation = location;
-                    console.log(jobDetails);
+                    
+                    // Uploading details to MongoDB
+                    try {
+                        // Modified: Check if job already exists based on jobTitle and jobDeadline
+                        const exists = await cefaloModel.findOne({ 
+                            jobTitle: jobDetails.jobTitle,       // Modified: checking by jobTitle
+                            jobDeadline: jobDetails.jobDeadline    // Modified: checking by jobDeadline
+                        });
+
+                        if (!exists) {
+                            await cefaloModel.create(jobDetails);   // Modified: inserting jobDetails into MongoDB if non-duplicate
+                            console.log(`Job added to MongoDB: ${jobDetails.jobTitle}`); // Modified: log insertion success
+                        } else {
+                            console.log(`Duplicate job found, skipping: ${jobDetails.jobTitle}`); // Modified: log duplicate job
+                        }
+                    } catch (error) {
+                        console.error("Error saving job details:", error); // Modified: log insertion error
+                    }
     }}
      else {
         console.log('Cafelo jobUrls not Found');
@@ -132,9 +149,9 @@ async function trackJobPosts() {
     await cefaloDetails(page);
 
     await browser.close();
+    await mongoose.disconnect();
 
 }
 
 trackJobPosts()
 
-// await mongoose.disconnect();
