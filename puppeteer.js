@@ -1,5 +1,7 @@
 const puppeteer = require("puppeteer"); 
 const mongoose = require('mongoose')
+// const fetch = require('node-fetch');
+
 require('dotenv').config(); // Load environment variables from .env
 const mongoURI = process.env.MONGO_URI
 
@@ -13,7 +15,7 @@ const { getJobDetailModel } = require('./schemas/jobDetails'); // Modified: impo
 const seliseModel = getJobDetailModel('selise');
 
 // or for Ollyo jobs:
-const ollyoModel = getJobDetailModel('ollyo');
+const enosisbdModel = getJobDetailModel('enosisbd');
 
 const cefaloModel = getJobDetailModel('cefalo');
 
@@ -130,6 +132,39 @@ async function cefaloDetails(page) {
         }
 }
 
+async function enosisbdDetails() {
+    const url = 'https://enosisbd.pinpointhq.com/postings.json?_=1740159075778';
+    const response = await fetch(url);
+    const data = await response.json();
+    const jobDetails = data.data.map(job => {
+        return {
+            jobTitle: job.location.city,
+            jobDeadline: job.deadline_at,
+            jobURL: job.title,
+            jobLocation: job.url,
+        };
+    });
+
+    // Uploading details to MongoDB
+    for (let i = 0; i < jobDetails.length; i++) {
+        try {
+            // Modified: Check if job already exists based on jobTitle and jobDeadline
+            const exists = await enosisbdModel.findOne({ 
+                jobTitle: jobDetails[i].jobTitle,       // Modified: checking by jobTitle
+                jobDeadline: jobDetails[i].jobDeadline    // Modified: checking by jobDeadline
+            });
+
+            if (!exists) {
+                await enosisbdModel.create(jobDetails[i]);   // Modified: inserting jobDetails into MongoDB if non-duplicate
+                console.log(`Job added to MongoDB: ${jobDetails[i].jobTitle}`); // Modified: log insertion success
+            } else {
+                console.log(`Duplicate job found, skipping: ${jobDetails[i].jobTitle}`); // Modified: log duplicate job
+            }
+        } catch (error) {
+            console.error("Error saving job details:", error); // Modified: log insertion error
+        }
+    }
+}
 
 async function trackJobPosts() {
     const browser = await puppeteer.launch({
@@ -146,6 +181,7 @@ async function trackJobPosts() {
 
     await seliseDetails(page);
     await cefaloDetails(page);
+    await enosisbdDetails();
 
     await browser.close();
     await mongoose.disconnect();

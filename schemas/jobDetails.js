@@ -36,6 +36,9 @@ module.exports.getJobDetailModel = (company) => {
         case 'cefalo':
             collectionName = 'cefaloJobs'
             break;
+        case 'enosisbd':
+            collectionName = 'enosisbdJobs'
+            break
         default:
             collectionName = 'defaultJobs'
     }
