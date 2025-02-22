@@ -13,11 +13,11 @@ mongoose.connect(mongoURI, {})
 
 let companies = [];
 
-app.use(async (req, res, next) => {
-    const collections = await mongoose.connection.db.listCollections().toArray();
-    companies = collections.map(collection => collection.name.replace('Jobs', ''));
-    next();
-}); // Get all the collection names from db and save it as companies[]
+// app.use(async (req, res, next) => {
+//     const collections = await mongoose.connection.db.listCollections().toArray();
+//     companies = collections.map(collection => collection.name.replace('Jobs', ''));
+//     next();
+// }); // Get all the collection names from db and save it as companies[]
 
 app.get("/test", async (req, res) => {
     mongoose.connect(mongoURI, {})
@@ -25,6 +25,11 @@ app.get("/test", async (req, res) => {
     .catch(err => console.error('couldnt connect to db:', err));
     res.send(process.env.MONGO_URI);
 
+});
+
+app.get("/test2", async (req, res) => {
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    res.send(collections);
 });
     
 app.get("/", async (req, res) => {
