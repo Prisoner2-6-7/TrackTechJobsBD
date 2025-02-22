@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 app.set('view engine', 'ejs');
 const mongoose = require('mongoose');
-const puppeteer = require('puppeteer');
 const { getJobDetailModel } = require('./schemas/jobDetails');
 require('dotenv').config();
 const mongoURI = process.env.MONGO_URI;
@@ -14,14 +13,17 @@ mongoose.connect(mongoURI, {})
 let companies = [];
 
 app.use(async (req, res, next) => {
-    if (!mongoose?.connection?.db) {
-        mongoose.connect(mongoURI, {})
-        .then(() => console.error('connected to db'))
-        .catch(err => console.error('couldnt connect to db:', err));
+    try {
+        const temp = await mongoose.connect(mongoURI, {})
+        console.error(temp)
+        const collections = await mongoose.connection.db.listCollections().toArray();
+        companies = collections.map(collection => collection.name.replace('Jobs', ''));
+
+    } catch (err) {
+        console.error("Error fetching collection names:", err);
     }
-    const collections = await mongoose.connection.db.listCollections().toArray();
-    companies = collections.map(collection => collection.name.replace('Jobs', ''));
     next();
+
 }); // Get all the collection names from db and save it as companies[]
 
 app.get("/test", async (req, res) => {
