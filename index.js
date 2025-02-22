@@ -27,32 +27,46 @@ let companies = [];
 
 // }); // Get all the collection names from db and save it as companies[]
 
-app.get("/test", async (req, res) => {
+app.get("/initializeDBconnection", async (req, res) => {
     mongoose.connect(mongoURI, {})
         .then(() => console.error('connected to db'))
         .catch(err => console.error('couldnt connect to db:', err));
-    res.send(process.env.MONGO_URI);
-
+    res.send('ok');
 });
 
-app.get("/test2", async (req, res) => {
-    await mongoose.connect(mongoURI, {})
-    const collections = await mongoose.connection.db.listCollections().toArray();
-    res.send(collections);
-});
+// app.get("/test2", async (req, res) => {
+//     await mongoose.connect(mongoURI, {})
+//     const collections = await mongoose.connection.db.listCollections().toArray();
+//     res.send(collections);
+// });
 
 app.get("/", async (req, res) => {
-    const companyDetails = await Promise.all(companies.map(async (company) => {
-        try {
-            const JobDetail = getJobDetailModel(company);
-            const jobs = await JobDetail.find({});
-            return { company, jobs };
-        } catch (error) {
-            console.error("Error fetching job details:", error);
-            return { company, jobs: [] };
-        }
-    }));
-    res.render("index", { companyDetails });
+
+    try {
+        const collections = await mongoose.connection.db.listCollections().toArray();
+        let localCompanies = collections.map(collection => collection.name.replace('Jobs', ''));
+
+        const companyDetails = await Promise.all(localCompanies.map(async (company) => {
+
+            try {
+                const JobDetail = getJobDetailModel(company);
+                const jobs = await JobDetail.find({});
+                return { company, jobs };
+            } catch (error) {
+                console.error("Error fetching job details:", error);
+                return { company, jobs: [] };
+            }
+        }));
+        res.render("index", { companyDetails });
+    }
+
+    catch (err) {
+        mongoose.connect(mongoURI, {})
+        .then(() => console.error('connected to db'))
+        .catch(err => console.error('couldnt connect to db:', err));
+        console.error("Error fetching collection names:", err);
+        res.send("Please Refresh the page");
+    }
 });
 
 // app.get("/all", async (req, res) => {
