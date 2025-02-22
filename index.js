@@ -14,6 +14,11 @@ mongoose.connect(mongoURI, {})
 let companies = [];
 
 app.use(async (req, res, next) => {
+    if (!mongoose?.connection?.db) {
+        mongoose.connect(mongoURI, {})
+        .then(() => console.error('connected to db'))
+        .catch(err => console.error('couldnt connect to db:', err));
+    }
     const collections = await mongoose.connection.db.listCollections().toArray();
     companies = collections.map(collection => collection.name.replace('Jobs', ''));
     next();
@@ -21,8 +26,8 @@ app.use(async (req, res, next) => {
 
 app.get("/test", async (req, res) => {
     mongoose.connect(mongoURI, {})
-    .then(() => console.error('connected to db'))
-    .catch(err => console.error('couldnt connect to db:', err));
+        .then(() => console.error('connected to db'))
+        .catch(err => console.error('couldnt connect to db:', err));
     res.send(process.env.MONGO_URI);
 
 });
@@ -31,7 +36,7 @@ app.get("/test2", async (req, res) => {
     const collections = await mongoose.connection.db.listCollections().toArray();
     res.send(collections);
 });
-    
+
 app.get("/", async (req, res) => {
     const companyDetails = await Promise.all(companies.map(async (company) => {
         try {
