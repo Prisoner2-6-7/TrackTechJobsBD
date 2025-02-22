@@ -15,20 +15,23 @@ mongoose.connect(mongoURI, {})
 
 let companies = [];
 
-// app.use(async (req, res, next) => {
-//     try {
-//         const temp = await mongoose.connect(mongoURI, {})
-//         // console.error(temp)
-//         const collections = await mongoose.connection.db.listCollections().toArray();
-//         companies = collections.map(collection => collection.name.replace('Jobs', ''));
+mongoose.connect(mongoURI, {})
+        .then(() => console.error('connected to db'))
+        .catch(err => console.error('couldnt connect to db:', err));
 
-//     } catch (err) {
-//         console.error("Error fetching collection names:", err);
-//     }
-//     console.error(companies);
-//     next();
+app.use(async (req, res, next) => {
+    try {
+        // console.error(temp)
+        const collections = await mongoose.connection.db.listCollections().toArray();
+        companies = collections.map(collection => collection.name.replace('Jobs', ''));
 
-// }); // Get all the collection names from db and save it as companies[]
+    } catch (err) {
+        console.error("Error fetching collection names:", err);
+    }
+    console.error(companies);
+    next();
+
+}); // Get all the collection names from db and save it as companies[]
 
 app.get("/initializeDBconnection", async (req, res) => {
     mongoose.connect(mongoURI, {})
