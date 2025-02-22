@@ -22,6 +22,7 @@ app.use(async (req, res, next) => {
     } catch (err) {
         console.error("Error fetching collection names:", err);
     }
+    console.error(companies);
     next();
 
 }); // Get all the collection names from db and save it as companies[]
