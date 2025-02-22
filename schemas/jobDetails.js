@@ -21,7 +21,6 @@ const jobDetailsSchema = new mongoose.Schema({
 });
 
 
-
 // This given by AI no clue about whats doing here
 
 module.exports.getJobDetailModel = (company) => {
@@ -40,7 +39,7 @@ module.exports.getJobDetailModel = (company) => {
             collectionName = 'enosisbdJobs'
             break
         default:
-            collectionName = 'defaultJobs'
+            break;
     }
     // Modified: Use a unique model name per company to prevent OverwriteModelError
     const modelName = `JobDetail_${company}`;
