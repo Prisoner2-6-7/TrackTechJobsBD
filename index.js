@@ -12,20 +12,20 @@ mongoose.connect(mongoURI, {})
 
 let companies = [];
 
-app.use(async (req, res, next) => {
-    try {
-        const temp = await mongoose.connect(mongoURI, {})
-        // console.error(temp)
-        const collections = await mongoose.connection.db.listCollections().toArray();
-        companies = collections.map(collection => collection.name.replace('Jobs', ''));
+// app.use(async (req, res, next) => {
+//     try {
+//         const temp = await mongoose.connect(mongoURI, {})
+//         // console.error(temp)
+//         const collections = await mongoose.connection.db.listCollections().toArray();
+//         companies = collections.map(collection => collection.name.replace('Jobs', ''));
 
-    } catch (err) {
-        console.error("Error fetching collection names:", err);
-    }
-    console.error(companies);
-    next();
+//     } catch (err) {
+//         console.error("Error fetching collection names:", err);
+//     }
+//     console.error(companies);
+//     next();
 
-}); // Get all the collection names from db and save it as companies[]
+// }); // Get all the collection names from db and save it as companies[]
 
 app.get("/test", async (req, res) => {
     mongoose.connect(mongoURI, {})
@@ -36,7 +36,7 @@ app.get("/test", async (req, res) => {
 });
 
 app.get("/test2", async (req, res) => {
-    await mongoose.connect(mongoURI, {})
+    // await mongoose.connect(mongoURI, {})
     const collections = await mongoose.connection.db.listCollections().toArray();
     res.send(collections);
 });
