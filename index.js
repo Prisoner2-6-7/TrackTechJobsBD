@@ -65,10 +65,10 @@ app.get("/", async (req, res) => {
 
     catch (err) {
         mongoose.connect(mongoURI, {})
-        .then(() => console.error('connected to db'))
-        .catch(err => console.error('couldnt connect to db:', err));
+        // .then(() => console.error('connected to db'))
+        // .catch(err => console.error('couldnt connect to db:', err));
         console.error("Error fetching collection names:", err);
-        res.send("Please Refresh the page");
+        res.send("Please Refresh the page" + err);
     }
 });
 
