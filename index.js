@@ -15,7 +15,7 @@ let companies = [];
 app.use(async (req, res, next) => {
     try {
         const temp = await mongoose.connect(mongoURI, {})
-        console.error(temp)
+        // console.error(temp)
         const collections = await mongoose.connection.db.listCollections().toArray();
         companies = collections.map(collection => collection.name.replace('Jobs', ''));
 
@@ -83,3 +83,5 @@ app.get("/", async (req, res) => {
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
     console.log('Server is running on port 3000');
 });
+
+module.exports = app;
