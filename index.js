@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
+// app.use(express.static(__dirname + "index"));
 const mongoose = require('mongoose');
 const { getJobDetailModel } = require('./schemas/jobDetails');
 require('dotenv').config();
