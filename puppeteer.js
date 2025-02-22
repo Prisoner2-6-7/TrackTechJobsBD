@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer"); 
 const mongoose = require('mongoose')
 // const fetch = require('node-fetch');
-
+const moment = require('moment');
 require('dotenv').config(); // Load environment variables from .env
 const mongoURI = process.env.MONGO_URI
 
@@ -11,12 +11,9 @@ mongoose.connect(mongoURI, {})
 
 const { getJobDetailModel } = require('./schemas/jobDetails'); // Modified: import helper
 
-// For Selise jobs:
+// importing jobDetail models
 const seliseModel = getJobDetailModel('selise');
-
-// or for Ollyo jobs:
 const enosisbdModel = getJobDetailModel('enosisbd');
-
 const cefaloModel = getJobDetailModel('cefalo');
 
 const requestHeaders = {
@@ -49,6 +46,7 @@ async function seliseDetails(page) {
                     jobLocation: locationEl ? locationEl.innerText.trim() : 'Location not found',
                 };
             });
+            jobDetails.jobDeadline = moment(jobDetails.jobDeadline, "MMM DD, YYYY").format("DD MMM YYYY");
             jobDetails.jobURL = jobUrls[i];
             
             try {
@@ -106,6 +104,7 @@ async function cefaloDetails(page) {
                     const liElements = await page.$$('article > div > ul:nth-child(12) > li');
                     const location = await page.evaluate((el) => el.innerText, liElements[0]);        
                     
+                    jobDetails.jobDeadline = moment(jobDetails.jobDeadline, "DD MMM YYYY").format("DD MMM YYYY");
                     jobDetails.jobURL = jobUrls[i];
                     jobDetails.jobLocation = location;
                     
@@ -138,16 +137,18 @@ async function enosisbdDetails() {
     const data = await response.json();
     const jobDetails = data.data.map(job => {
         return {
-            jobTitle: job.location.city,
+            jobTitle: job.title,
             jobDeadline: job.deadline_at,
-            jobURL: job.title,
-            jobLocation: job.url,
+            jobURL:  job.url,
+            jobLocation: job.location.city,
         };
     });
 
     // Uploading details to MongoDB
     for (let i = 0; i < jobDetails.length; i++) {
         try {
+
+            jobDetails[i].jobDeadline = moment(jobDetails[i].jobDeadline).format("DD MMM YYYY");
             // Modified: Check if job already exists based on jobTitle and jobDeadline
             const exists = await enosisbdModel.findOne({ 
                 jobTitle: jobDetails[i].jobTitle,       // Modified: checking by jobTitle
@@ -165,6 +166,7 @@ async function enosisbdDetails() {
         }
     }
 }
+
 
 async function trackJobPosts() {
     const browser = await puppeteer.launch({
