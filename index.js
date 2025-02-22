@@ -35,6 +35,7 @@ app.get("/test", async (req, res) => {
 });
 
 app.get("/test2", async (req, res) => {
+    await mongoose.connect(mongoURI, {})
     const collections = await mongoose.connection.db.listCollections().toArray();
     res.send(collections);
 });
