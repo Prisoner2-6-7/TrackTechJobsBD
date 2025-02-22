@@ -1,15 +1,15 @@
 const express = require('express');
 const app = express();
 app.set('view engine', 'ejs');
-
 const mongoose = require('mongoose');
 const puppeteer = require('puppeteer');
 const { getJobDetailModel } = require('./schemas/jobDetails');
 require('dotenv').config();
 const mongoURI = process.env.MONGO_URI;
+
 mongoose.connect(mongoURI, {})
-    .then(() => console.log('connected to db'))
-    .catch(err => console.log('couldnt connect to db:', err));
+    .then(() => console.error('connected to db'))
+    .catch(err => console.error('couldnt connect to db:', err));
 
 let companies = [];
 
@@ -19,6 +19,14 @@ app.use(async (req, res, next) => {
     next();
 }); // Get all the collection names from db and save it as companies[]
 
+app.get("/test", async (req, res) => {
+    mongoose.connect(mongoURI, {})
+    .then(() => console.error('connected to db'))
+    .catch(err => console.error('couldnt connect to db:', err));
+    res.send(process.env.MONGO_URI);
+
+});
+    
 app.get("/", async (req, res) => {
     const companyDetails = await Promise.all(companies.map(async (company) => {
         try {
