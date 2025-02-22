@@ -58,9 +58,9 @@ async function seliseDetails(page) {
                 
                 if (!exists) {
                     await seliseModel.create(jobDetails);   // Modified: inserting jobDetails into MongoDB if non-duplicate
-                    console.log(`Job added to MongoDB: ${jobDetails.jobTitle}`); // Modified: log insertion success
+                    console.log(`Added to MongoDB: ${jobDetails.jobURL}`); // Modified: log insertion success
                 } else {
-                    console.log(`Duplicate job found, skipping: ${jobDetails.jobTitle}`); // Modified: log duplicate job
+                    console.log(`Duplicate job found, skipping: ${jobDetails.jobURL}`); // Modified: log duplicate job
                 }
             } catch (error) {
                 console.error("Error saving job details:", error); // Modified: log insertion error
@@ -118,9 +118,9 @@ async function cefaloDetails(page) {
 
                         if (!exists) {
                             await cefaloModel.create(jobDetails);   // Modified: inserting jobDetails into MongoDB if non-duplicate
-                            console.log(`Job added to MongoDB: ${jobDetails.jobTitle}`); // Modified: log insertion success
+                            console.log(`Job added to MongoDB: ${jobDetails.jobURL}`); // Modified: log insertion success
                         } else {
-                            console.log(`Duplicate job found, skipping: ${jobDetails.jobTitle}`); // Modified: log duplicate job
+                            console.log(`Duplicate job found, skipping: ${jobDetails.jobURL}`); // Modified: log duplicate job
                         }
                     } catch (error) {
                         console.error("Error saving job details:", error); // Modified: log insertion error
@@ -157,9 +157,9 @@ async function enosisbdDetails() {
 
             if (!exists) {
                 await enosisbdModel.create(jobDetails[i]);   // Modified: inserting jobDetails into MongoDB if non-duplicate
-                console.log(`Job added to MongoDB: ${jobDetails[i].jobTitle}`); // Modified: log insertion success
+                console.log(`Added to MongoDB: ${jobDetails[i].jobURL}`); // Modified: log insertion success
             } else {
-                console.log(`Duplicate job found, skipping: ${jobDetails[i].jobTitle}`); // Modified: log duplicate job
+                console.log(`Duplicate job found, skipping: ${jobDetails[i].jobURL}`); // Modified: log duplicate job
             }
         } catch (error) {
             console.error("Error saving job details:", error); // Modified: log insertion error
