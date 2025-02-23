@@ -1,4 +1,6 @@
-const puppeteer = require("puppeteer"); 
+const puppeteer = require("puppeteer-core");
+const chromium = require("@sparticuz/chromium");
+
 const mongoose = require('mongoose')
 const moment = require('moment');
 require('dotenv').config(); // Load environment variables from .env
@@ -168,7 +170,7 @@ async function enosisbdDetails() {
 
 
 async function trackJobPosts() {
-    const browser = await puppeteerCore.launch({
+    const browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(),
