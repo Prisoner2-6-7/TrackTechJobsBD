@@ -14,18 +14,20 @@ const mongoURI = process.env.MONGO_URI;
 let companies = [];
 
 app.use(async (req, res, next) => {
+    // changed line here: Wait until the connection is fully open
+    if (!mongoose.connection.db) {
+        await new Promise(resolve => mongoose.connection.once("open", resolve));
+    }
     try {
-        await mongoose.connect(mongoURI, {})
         const collections = await mongoose.connection.db.listCollections().toArray();
         companies = collections.map(collection => collection.name.replace('Jobs', ''));
-
     } catch (err) {
         console.error("Error fetching collection names:", err);
     }
     console.error(companies);
     next();
+});
 
-}); // Get all the collection names from db and save it as companies[]
 
 app.get("/initializeDBconnection", async (req, res) => {
     mongoose.connect(mongoURI, {})
