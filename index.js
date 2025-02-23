@@ -69,7 +69,7 @@ app.get("/", async (req, res) => {
         // .then(() => console.error('connected to db'))
         // .catch(err => console.error('couldnt connect to db:', err));
         console.error("Error fetching collection names:", err);
-        res.status(500).send("Please Refresh the page" + err);
+        res(sendStatus0).send("Please Refresh the page");
     }
 });
 
