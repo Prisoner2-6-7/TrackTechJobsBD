@@ -10,14 +10,13 @@ const { getJobDetailModel, Suggestion } = require('./schemas/jobDetails'); // Im
 require('dotenv').config();
 const mongoURI = process.env.MONGO_URI;
 
-mongoose.connect(mongoURI, {})
-    .then(() => console.error('connected to db'))
-    .catch(err => console.error('couldnt connect to db:', err));
+
 
 let companies = [];
 
 app.use(async (req, res, next) => {
     try {
+        await mongoose.connect(mongoURI, {})
         // console.error(temp)
         const collections = await mongoose.connection.db.listCollections().toArray();
         companies = collections.map(collection => collection.name.replace('Jobs', ''));
@@ -25,7 +24,7 @@ app.use(async (req, res, next) => {
     } catch (err) {
         console.error("Error fetching collection names:", err);
     }
-    console.error(companies);
+    // console.log(companies);
     next();
 
 }); // Get all the collection names from db and save it as companies[]

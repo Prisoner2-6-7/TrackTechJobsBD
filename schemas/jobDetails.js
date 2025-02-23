@@ -19,20 +19,11 @@ const jobDetailsSchema = new mongoose.Schema({
     },
 });
 
-const suggestionSchema = new mongoose.Schema({
-    companyName: {
-        type: String,
-        required: true,
-        unique: true
-    }
-});
 
-const Suggestion = mongoose.model('Suggestion', suggestionSchema);
+
+
 
 module.exports.getJobDetailModel = (company) => {
-    // changed line here: if company is "suggestions", return the Suggestion model
-
-    
     let collectionName; // determine collection name based on company
     switch (company) {
         case 'selise': 
@@ -55,4 +46,13 @@ module.exports.getJobDetailModel = (company) => {
     return mongoose.models[modelName] || mongoose.model(modelName, jobDetailsSchema, collectionName);
 }
 
+
+const suggestionSchema = new mongoose.Schema({
+    companyName: {
+        type: String,
+        required: true,
+        unique: true
+    }
+});
+const Suggestion = mongoose.model('Suggestion', suggestionSchema);
 module.exports.Suggestion = Suggestion;
