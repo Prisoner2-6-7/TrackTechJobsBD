@@ -36,13 +36,24 @@
   <body>
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="
+            --bs-btn-padding-y: 0.25rem;
+            --bs-btn-padding-x: 0.5rem;
+            --bs-btn-font-size: 0.75rem;
+          "
+        >
+          Alert me
+        </button>
         <form class="d-flex ms-auto" action="/addCompany" method="POST">
           <span class="navbar-text me-2">Suggestions:</span>
           <input
             class="form-control me-2"
             placeholder="Company Name"
             aria-label="Search"
-            name="companyName"  
+            name="companyName"
           />
           <button class="btn btn-outline-success" type="submit">Add</button>
         </form>
@@ -65,9 +76,8 @@
           </tr>
         </thead>
         <tbody>
-        <% let counter = 1; %>
-          <% companyDetails.forEach(detail => { %> 
-            <% detail.jobs.forEach(job => { %>
+          <% let counter = 1; %> <% companyDetails.forEach(detail => { %> <%
+          detail.jobs.forEach(job => { %>
           <tr>
             <th scope="row"><%= counter ++ %></th>
             <td>

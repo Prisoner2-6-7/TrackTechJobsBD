@@ -20,9 +20,6 @@ const jobDetailsSchema = new mongoose.Schema({
 });
 
 
-
-
-
 module.exports.getJobDetailModel = (company) => {
     let collectionName; // determine collection name based on company
     switch (company) {
