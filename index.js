@@ -7,16 +7,18 @@ app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
 // app.use(express.static(__dirname + "index"));
 const mongoose = require('mongoose');
 const { getJobDetailModel, Suggestion } = require('./schemas/jobDetails'); // Import Suggestion model
+const trackJobPosts = require('./puppeteer');
 require('dotenv').config();
 const mongoURI = process.env.MONGO_URI;
 
-
+mongoose.connect(mongoURI, {})
+    .then(() => console.error('connected to db'))
+    .catch(err => console.error('couldnt connect to db:', err));
 
 let companies = [];
 
 app.use(async (req, res, next) => {
     try {
-        await mongoose.connect(mongoURI, {})
         // console.error(temp)
         const collections = await mongoose.connection.db.listCollections().toArray();
         companies = collections.map(collection => collection.name.replace('Jobs', ''));
@@ -24,7 +26,7 @@ app.use(async (req, res, next) => {
     } catch (err) {
         console.error("Error fetching collection names:", err);
     }
-    // console.log(companies);
+    console.error(companies);
     next();
 
 }); // Get all the collection names from db and save it as companies[]
@@ -89,6 +91,15 @@ app.post("/addCompany", async (req, res) => {
     res.redirect("/");
 });
 
+app.get("/runScraper", async (req, res) => {
+    try {
+        await trackJobPosts();
+        res.send("Job scraping completed successfully.");
+    } catch (error) {
+        console.error("Error running job scraper:", error);
+        res.status(500).send("Error running job scraper.");
+    }
+});
 
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
     console.log('Server is running on port 3000');

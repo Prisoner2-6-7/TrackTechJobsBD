@@ -1,6 +1,5 @@
 const puppeteer = require("puppeteer"); 
 const mongoose = require('mongoose')
-// const fetch = require('node-fetch');
 const moment = require('moment');
 require('dotenv').config(); // Load environment variables from .env
 const mongoURI = process.env.MONGO_URI
@@ -190,4 +189,4 @@ async function trackJobPosts() {
 
 }
 
-trackJobPosts()
+module.exports = trackJobPosts;
