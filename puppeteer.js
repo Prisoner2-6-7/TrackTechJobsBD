@@ -192,5 +192,5 @@ async function trackJobPosts() {
     await mongoose.disconnect();
 
 }
-
+// trackJobPosts();
 module.exports = trackJobPosts;

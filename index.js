@@ -11,15 +11,11 @@ const trackJobPosts = require('./puppeteer');
 require('dotenv').config();
 const mongoURI = process.env.MONGO_URI;
 
-mongoose.connect(mongoURI, {})
-    .then(() => console.error('connected to db'))
-    .catch(err => console.error('couldnt connect to db:', err));
-
 let companies = [];
 
 app.use(async (req, res, next) => {
     try {
-        // console.error(temp)
+        await mongoose.connect(mongoURI, {})
         const collections = await mongoose.connection.db.listCollections().toArray();
         companies = collections.map(collection => collection.name.replace('Jobs', ''));
 
