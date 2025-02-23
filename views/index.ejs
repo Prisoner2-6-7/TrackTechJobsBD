@@ -36,13 +36,13 @@
   <body>
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
-        <form class="d-flex ms-auto">
+        <form class="d-flex ms-auto" action="/addCompany" method="POST">
           <span class="navbar-text me-2">Suggestions:</span>
           <input
             class="form-control me-2"
-            type="search"
             placeholder="Company Name"
             aria-label="Search"
+            name="companyName"  
           />
           <button class="btn btn-outline-success" type="submit">Add</button>
         </form>

@@ -1,5 +1,4 @@
-//// filepath: /home/parrot/ProgPrac/TrackTechJobsBD/schemas/jobDetails.js
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const jobDetailsSchema = new mongoose.Schema({
     jobTitle: {
@@ -16,32 +15,44 @@ const jobDetailsSchema = new mongoose.Schema({
     },
     jobLocation: {
         type: String,
-        required: true
+        required: false
     },
 });
 
+const suggestionSchema = new mongoose.Schema({
+    companyName: {
+        type: String,
+        required: true,
+        unique: true
+    }
+});
 
-// This given by AI no clue about whats doing here
+const Suggestion = mongoose.model('Suggestion', suggestionSchema);
 
 module.exports.getJobDetailModel = (company) => {
-    let collectionName; // Modified: determine collection name based on company
+    // changed line here: if company is "suggestions", return the Suggestion model
+
+    
+    let collectionName; // determine collection name based on company
     switch (company) {
         case 'selise': 
-            collectionName = 'seliseJobs'
+            collectionName = 'seliseJobs';
             break;
         case 'ollyo': 
-            collectionName = 'ollyoJobs'
+            collectionName = 'ollyoJobs';
             break;
         case 'cefalo':
-            collectionName = 'cefaloJobs'
+            collectionName = 'cefaloJobs';
             break;
         case 'enosisbd':
-            collectionName = 'enosisbdJobs'
-            break
-        default:
+            collectionName = 'enosisbdJobs';
             break;
+        default:
+            throw new Error(`Unknown company: ${company}`); // changed line here: handle unknown companies
     }
-    // Modified: Use a unique model name per company to prevent OverwriteModelError
+    // changed line here: Use a unique model name per company to prevent OverwriteModelError
     const modelName = `JobDetail_${company}`;
-    return mongoose.models[modelName] || mongoose.model(modelName, jobDetailsSchema, collectionName)
+    return mongoose.models[modelName] || mongoose.model(modelName, jobDetailsSchema, collectionName);
 }
+
+module.exports.Suggestion = Suggestion;
