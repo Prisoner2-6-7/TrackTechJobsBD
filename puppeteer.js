@@ -6,9 +6,6 @@ const moment = require('moment');
 require('dotenv').config(); // Load environment variables from .env
 const mongoURI = process.env.MONGO_URI
 
-mongoose.connect(mongoURI, {})
-.then(() => console.log('connected to db'))
-.catch(err => console.log('couldnt connect to db:', err))
 
 const { getJobDetailModel } = require('./schemas/jobDetails'); // Modified: import helper
 

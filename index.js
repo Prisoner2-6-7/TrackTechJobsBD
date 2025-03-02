@@ -13,6 +13,10 @@ const mongoURI = process.env.MONGO_URI;
 
 let companies = [];
 
+mongoose.connect(mongoURI, {})
+.then(() => console.log('connected to db'))
+.catch(err => console.log('couldnt connect to db:', err))
+
 app.use(async (req, res, next) => {
     // changed line here: Wait until the connection is fully open
     if (!mongoose.connection.db) {
