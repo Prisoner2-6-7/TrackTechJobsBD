@@ -47,7 +47,7 @@ async function seliseDetails(page) {
                     jobLocation: locationEl ? locationEl.innerText.trim() : 'Location not found',
                 };
             });
-            jobDetails.jobDeadline = moment(jobDetails.jobDeadline, "MMM DD, YYYY").format("DD-MM-YYYY");
+            jobDetails.jobDeadline = moment(jobDetails.jobDeadline, "MMM DD, YYYY").format("YYYY-MM-DD");
             jobDetails.jobURL = jobUrls[i];
             
             try {
@@ -105,7 +105,7 @@ async function cefaloDetails(page) {
                     const liElements = await page.$$('article > div > ul:nth-child(12) > li');
                     const location = await page.evaluate((el) => el.innerText, liElements[0]);        
                     
-                    jobDetails.jobDeadline = moment(jobDetails.jobDeadline, "DD MMM YYYY").format("DD-MM-YYYY");
+                    jobDetails.jobDeadline = moment(jobDetails.jobDeadline, "DD MMM YYYY").format("YYYY-MM-DD");
                     jobDetails.jobURL = jobUrls[i];
                     jobDetails.jobLocation = location;
                     
@@ -149,7 +149,7 @@ async function enosisbdDetails() {
     for (let i = 0; i < jobDetails.length; i++) {
         try {
 
-            jobDetails[i].jobDeadline = moment(jobDetails[i].jobDeadline).format("DD-MM-YYYY");
+            jobDetails[i].jobDeadline = moment(jobDetails[i].jobDeadline).format("YYYY-MM-DD");
             // Modified: Check if job already exists based on jobTitle and jobDeadline
             const exists = await enosisbdModel.findOne({ 
                 jobTitle: jobDetails[i].jobTitle,       // Modified: checking by jobTitle
@@ -189,7 +189,6 @@ async function trackJobPosts() {
     await enosisbdDetails();
 
     await browser.close();
-    await mongoose.disconnect();
 
 }
 // trackJobPosts();
