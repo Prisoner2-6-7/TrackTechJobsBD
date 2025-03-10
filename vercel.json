@@ -6,5 +6,11 @@
         "src": "/(.*)",
         "dest": "index.js"
       }
-    ]
+    ],
+    "crons": [
+    {
+      "path": "/runScraper",
+      "schedule": "0 0 * * 0"
+    }
+  ]
   }
